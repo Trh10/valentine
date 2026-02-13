@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>💕 Pour Toi Gemima 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        html,body{width:100%;overflow-x:hidden}
+        body{
+            font-family:'Dancing Script',cursive;
+            background:#0a0000;
+            min-height:100vh;
+            min-height:100dvh;
+        }
+
+        /* ==================== INTRO ==================== */
+        .intro{
+            position:fixed;top:0;left:0;width:100%;height:100%;height:100dvh;
+            background:radial-gradient(ellipse at 50% 40%,#1a0000 0%,#0a0000 70%);
+            display:flex;flex-direction:column;justify-content:center;align-items:center;
+            z-index:1000;
+            transition:all 1.2s cubic-bezier(.4,0,.2,1);
+            cursor:pointer;
+            -webkit-tap-highlight-color:transparent;
+        }
+        .intro.hide{opacity:0;transform:scale(1.5);pointer-events:none}
+
+        /* Étoiles */
+        .stars{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+        .star{position:absolute;background:#ff3333;border-radius:50%;animation:twinkle 2s ease-in-out infinite}
+        @keyframes twinkle{0%,100%{opacity:0.1;transform:scale(0.5)}50%{opacity:0.8;transform:scale(1.2)}}
+
+        /* Enveloppe intro */
+        .envelope{
+            width:200px;height:160px;
+            position:relative;cursor:pointer;
+            animation:gentleFloat 3s ease-in-out infinite;
+        }
+        @keyframes gentleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .envelope-body{
+            width:200px;height:130px;position:absolute;bottom:0;
+            background:linear-gradient(145deg,#cc0000,#990000);
+            border-radius:12px;
+            box-shadow:0 15px 50px rgba(255,0,0,0.3);
+        }
+        .envelope-flap{
+            width:0;height:0;
+            border-left:100px solid transparent;border-right:100px solid transparent;
+            border-top:80px solid #aa0000;
+            position:absolute;top:0;
+            filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+            transition:transform .6s ease;transform-origin:top center;
+        }
+        .envelope:active .envelope-flap{transform:rotateX(180deg)}
+        .envelope-heart{
+            position:absolute;top:55%;left:50%;
+            transform:translate(-50%,-50%);font-size:40px;z-index:2;
+            animation:heartBeat 1s infinite;
+        }
+        @keyframes heartBeat{
+            0%,100%{transform:translate(-50%,-50%) scale(1)}
+            15%{transform:translate(-50%,-50%) scale(1.15)}
+            30%{transform:translate(-50%,-50%) scale(1)}
+            45%{transform:translate(-50%,-50%) scale(1.1)}
+        }
+
+        .intro-title{
+            font-family:'Great Vibes',cursive;
+            font-size:1.8rem;color:#ff2222;
+            margin-top:30px;opacity:0;
+            animation:fadeUp .8s ease .3s forwards;
+            text-shadow:0 0 20px rgba(255,0,0,0.4);
+        }
+        .intro-sub{
+            color:rgba(255,255,255,0.4);font-size:.95rem;
+            margin-top:12px;animation:blink 2s infinite;
+        }
+        @keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ==================== SCÈNE PRINCIPALE ==================== */
+        .scene{
+            position:relative;width:100%;min-height:100vh;min-height:100dvh;
+            opacity:0;transition:opacity 1.5s ease .5s;
+            overflow-y:auto;overflow-x:hidden;
+            background:linear-gradient(180deg,#0a0000 0%,#110000 50%,#0a0000 100%);
+        }
+        .scene.show{opacity:1}
+
+        /* Canvas */
+        #particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+        .content{
+            position:relative;z-index:10;
+            display:flex;flex-direction:column;align-items:center;
+            padding:50px 20px 100px;
+        }
+
+        /* NOM */
+        .her-name{
+            font-family:'Great Vibes',cursive;
+            font-size:clamp(2.8rem,10vw,4.5rem);
+            color:transparent;
+            background:linear-gradient(45deg,#ff0000,#cc0000,#ff3333,#ff0000);
+            background-size:300% 300%;
+            -webkit-background-clip:text;background-clip:text;
+            animation:gradShift 4s ease infinite,fadeUp 1s ease .3s forwards;
+            opacity:0;
+            filter:drop-shadow(0 0 25px rgba(255,0,0,0.4));
+        }
+        @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        .tagline{
+            color:rgba(255,255,255,.5);font-family:'Pacifico',cursive;
+            font-size:1rem;margin:8px 0 35px;
+            opacity:0;animation:fadeUp 1s ease .8s forwards;
+        }
+
+        /* ==================== GRAND CŒUR CENTRAL ==================== */
+        .heart-scene{
+            position:relative;
+            width:clamp(280px,85vw,400px);
+            height:clamp(280px,85vw,400px);
+            margin:0 auto 40px;
+            opacity:0;animation:fadeUp 1s ease 1.2s forwards;
+        }
+
+        .main-heart-svg{
+            width:100%;height:100%;
+            filter:drop-shadow(0 0 40px rgba(255,0,0,0.4));
+        }
+
+        /* Cœur dessiné progressivement */
+        .heart-outline{
+            fill:none;stroke:#cc0000;stroke-width:2;
+            stroke-dasharray:1200;stroke-dashoffset:1200;
+            animation:drawHeart 3s ease 1.5s forwards;
+        }
+        @keyframes drawHeart{to{stroke-dashoffset:0}}
+
+        .heart-fill{
+            fill:url(#heartGrad);opacity:0;
+            animation:fillHeart 1s ease 4s forwards;
+        }
+        @keyframes fillHeart{to{opacity:1}}
+
+        /* Petits cœurs qui orbitent */
+        .orbit-heart{
+            position:absolute;font-size:18px;
+            top:50%;left:50%;
+            margin-top:-9px;margin-left:-9px;
+            animation:orbit var(--dur) linear infinite;
+            opacity:0;
+        }
+        @keyframes orbit{
+            0%{transform:rotate(0deg) translateX(var(--dist)) rotate(0deg);opacity:.8}
+            50%{opacity:1}
+            100%{transform:rotate(360deg) translateX(var(--dist)) rotate(-360deg);opacity:.8}
+        }
+
+        /* Pulse glow derrière le cœur */
+        .heart-glow{
+            position:absolute;top:50%;left:50%;
+            transform:translate(-50%,-50%);
+            width:120%;height:120%;
+            background:radial-gradient(circle,rgba(255,0,0,0.15) 0%,transparent 70%);
+            animation:glowPulse 2s ease-in-out infinite;
+            pointer-events:none;
+        }
+        @keyframes glowPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+
+        /* ==================== COUNTDOWN / DATE ==================== */
+        .date-badge{
+            background:linear-gradient(135deg,rgba(204,0,0,.2),rgba(153,0,0,.2));
+            border:1px solid rgba(255,0,0,.3);
+            border-radius:20px;padding:12px 30px;
+            margin-bottom:40px;
+            opacity:0;animation:fadeUp 1s ease 5s forwards;
+        }
+        .date-badge span{
+            font-family:'Pacifico',cursive;font-size:1rem;
+            color:#ff3333;
+        }
+
+        /* ==================== LETTRE ==================== */
+        .letter-section{
+            width:clamp(300px,92vw,500px);
+            margin:0 auto 30px;
+            opacity:0;animation:fadeUp 1s ease 5.5s forwards;
+        }
+        .letter{
+            background:linear-gradient(160deg,#111 0%,#0d0000 100%);
+            border:1px solid rgba(255,0,0,.2);
+            border-radius:25px;padding:clamp(25px,6vw,40px);
+            position:relative;overflow:hidden;
+            box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 80px rgba(255,0,0,.08);
+        }
+        .letter::before{
+            content:'';position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,transparent,#ff0000,#cc0000,#ff0000,transparent);
+        }
+        .letter::after{
+            content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,transparent,#ff0000,#cc0000,#ff0000,transparent);
+        }
+
+        .letter-header{
+            font-family:'Great Vibes',cursive;
+            font-size:clamp(1.6rem,5vw,2.2rem);
+            color:#ff2222;text-align:center;
+            margin-bottom:25px;
+        }
+        .letter p{
+            font-family:'Dancing Script',cursive;
+            font-size:clamp(1.05rem,3.5vw,1.2rem);
+            color:rgba(255,255,255,.85);line-height:1.9;
+            margin-bottom:18px;text-align:justify;
+        }
+        .letter strong{color:#ff3333}
+        .letter em{color:#ff6666;font-style:italic}
+
+        .letter .funny{
+            text-align:center!important;
+            font-size:clamp(1rem,3vw,1.15rem)!important;
+            padding:12px;
+            background:rgba(255,0,0,.08);
+            border-radius:15px;
+            color:#ff4444!important;
+            margin:15px 0!important;
+        }
+        .letter .highlight{
+            background:rgba(255,0,0,.06);
+            border-left:3px solid #cc0000;
+            padding:15px 18px;border-radius:0 15px 15px 0;
+            text-align:center!important;
+            font-size:clamp(1.05rem,3.5vw,1.2rem)!important;
+            color:rgba(255,255,255,.95)!important;
+            margin:20px 0!important;
+        }
+        .letter .final{
+            text-align:center!important;
+            font-size:clamp(1.2rem,4vw,1.4rem)!important;
+            font-weight:700;color:#ff2222!important;
+            margin-top:25px!important;
+        }
+        .signature{
+            font-family:'Great Vibes',cursive;font-size:1.5rem;
+            color:#cc0000;text-align:right;margin-top:20px;
+        }
+
+        /* ==================== BOUTON ==================== */
+        .magic-btn{
+            display:flex;align-items:center;justify-content:center;gap:8px;
+            margin:35px auto 20px;padding:16px 45px;
+            font-family:'Dancing Script',cursive;font-size:1.4rem;font-weight:700;
+            color:white;
+            background:linear-gradient(135deg,#cc0000,#990000);
+            border:1px solid rgba(255,0,0,.4);
+            border-radius:60px;cursor:pointer;
+            box-shadow:0 8px 30px rgba(204,0,0,.35);
+            transition:all .3s ease;
+            position:relative;overflow:hidden;
+            opacity:0;animation:fadeUp 1s ease 6s forwards;
+        }
+        .magic-btn::after{
+            content:'';position:absolute;top:0;left:-100%;
+            width:100%;height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+            animation:shimmer 3s infinite;
+        }
+        @keyframes shimmer{0%{left:-100%}100%{left:100%}}
+        .magic-btn:active{transform:scale(.93)}
+
+        /* ==================== EXPLOSION ==================== */
+        .explosion{position:fixed;top:0;left:0;width:100%;height:100%;z-index:2000;pointer-events:none;display:none}
+        .explosion.active{display:block}
+        .burst{position:absolute;animation:burstOut 1.8s ease-out forwards}
+        @keyframes burstOut{
+            0%{transform:translate(0,0) scale(0) rotate(0);opacity:1}
+            40%{opacity:1}
+            100%{transform:translate(var(--x),var(--y)) scale(var(--s)) rotate(var(--r));opacity:0}
+        }
+
+        /* ==================== PLEIN ÉCRAN CŒUR ==================== */
+        .fullscreen-love{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            display:none;flex-direction:column;justify-content:center;align-items:center;
+            z-index:3000;background:rgba(5,0,0,.92);
+            backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+        }
+        .fullscreen-love.show{display:flex}
+        .fs-heart{
+            font-size:min(45vw,180px);
+            animation:megaPulse .8s ease infinite;
+        }
+        @keyframes megaPulse{
+            0%,100%{transform:scale(1);filter:drop-shadow(0 0 30px rgba(255,0,0,.7))}
+            50%{transform:scale(1.15);filter:drop-shadow(0 0 60px rgba(255,0,0,1))}
+        }
+        .fs-text{
+            font-family:'Great Vibes',cursive;
+            font-size:clamp(1.4rem,5vw,2.5rem);
+            color:white;text-align:center;
+            text-shadow:0 0 30px rgba(255,0,0,.6);
+            margin-top:20px;padding:0 20px;
+            opacity:0;animation:fadeUp 1s ease .3s forwards;
+        }
+        .fs-close{
+            position:absolute;top:15px;right:15px;
+            width:40px;height:40px;border-radius:50%;
+            background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+            color:white;font-size:1.2rem;
+            cursor:pointer;display:flex;align-items:center;justify-content:center;
+            transition:all .3s;
+        }
+        .fs-close:active{background:rgba(255,255,255,.2)}
+
+        /* Scrollbar */
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:#660000;border-radius:2px}
+    </style>
+</head>
+<body>
+
+<!-- ==================== INTRO ==================== -->
+<div class="intro" id="intro">
+    <div class="stars" id="stars"></div>
+
+    <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+            <span class="envelope-heart">💖</span>
+        </div>
+    </div>
+
+    <p class="intro-title">Tu as reçu une lettre d'amour...</p>
+    <p class="intro-sub">✨ Appuie pour ouvrir ✨</p>
+</div>
+
+<!-- ==================== CANVAS ==================== -->
+<canvas id="particles"></canvas>
+
+<!-- ==================== SCÈNE ==================== -->
+<div class="scene" id="scene">
+    <div class="content">
+
+        <h1 class="her-name">Gemima Mbieme</h1>
+        <p class="tagline">❤️ 14 Février 2026 ❤️</p>
+
+        <!-- GRAND CŒUR CENTRAL -->
+        <div class="heart-scene" id="heartScene">
+            <div class="heart-glow"></div>
+            <svg class="main-heart-svg" viewBox="0 0 512 512">
+                <defs>
+                    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff0000"/>
+                        <stop offset="50%" stop-color="#cc0000"/>
+                        <stop offset="100%" stop-color="#990000"/>
+                    </linearGradient>
+                </defs>
+                <!-- Cœur outline animé -->
+                <path class="heart-outline" d="M256 448l-30-28C118 322 48 262 48 186 48 124 98 74 160 74c36 0 70 17 96 44 26-27 60-44 96-44 62 0 112 50 112 112 0 76-70 136-178 234z"/>
+                <!-- Cœur rempli -->
+                <path class="heart-fill" d="M256 448l-30-28C118 322 48 262 48 186 48 124 98 74 160 74c36 0 70 17 96 44 26-27 60-44 96-44 62 0 112 50 112 112 0 76-70 136-178 234z"/>
+            </svg>
+        </div>
+
+        <!-- DATE -->
+        <div class="date-badge">
+            <span>💕 Joyeuse Saint-Valentin 💕</span>
+        </div>
+
+        <!-- LETTRE -->
+        <div class="letter-section">
+            <div class="letter">
+                <h2 class="letter-header">Gemima ❤️💖💗</h2>
+
+                <p>Avant toi, je croyais savoir ce qu'était l'amour. Mais tu es arrivée et tu as redéfini ce mot. Tu n'es pas seulement la plus belle chose qui me soit arrivée, tu es le calme après la tempête, <strong>mon refuge et ma plus belle certitude</strong>.</p>
+
+                <p>Je n'ai pas la prétention d'être parfait, mais je t'aime avec une intensité qui me dépasse. Mon cœur ne bat plus seulement pour moi, il bat en rythme avec le tien.</p>
+
+                <p class="funny">( duku duku duku wana ndenge ezo batre mdr 🤣 )</p>
+
+                <p>Je veux être les bras qui te rassurent quand tu doutes, la voix qui t'encourage quand tu as peur, et l'homme qui te regarde chaque matin comme si c'était la <em>toute première fois</em>.</p>
+
+                <p class="highlight">Ce que nous avons est rare, Gemima. Je ne veux pas juste t'aimer aujourd'hui. Je veux t'apprendre par cœur, grandir à tes côtés, et écrire avec toi une histoire que même le temps ne pourra pas effacer.</p>
+
+                <p class="final">Je t'aime, d'un amour infini et absolu. 💞</p>
+
+                <div class="signature">Pour toujours, ton amour ❤️</div>
+            </div>
+        </div>
+
+        <button class="magic-btn" id="magicBtn" type="button">💝 Appuie ici bébé 💝</button>
+    </div>
+</div>
+
+<!-- EXPLOSION -->
+<div class="explosion" id="explosion"></div>
+
+<!-- FULLSCREEN LOVE -->
+<div class="fullscreen-love" id="fsLove">
+    <button class="fs-close" id="fsClose">✕</button>
+    <div class="fs-heart">❤️</div>
+    <p class="fs-text">Je t'aime Gemima...<br>Aujourd'hui, demain et pour toujours 💞</p>
+</div>
+
+<script>
+// ÉTOILES
+(function(){
+    const c=document.getElementById('stars');
+    for(let i=0;i<80;i++){
+        const s=document.createElement('div');
+        s.className='star';
+        const size=Math.random()*2.5+.5;
+        s.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s`;
+        c.appendChild(s);
+    }
+})();
+
+// ORBITING HEARTS
+(function(){
+    const hs=document.getElementById('heartScene');
+    const emojis=['❤️','💖','🩷','❣️','💕'];
+    for(let i=0;i<10;i++){
+        const h=document.createElement('span');
+        h.className='orbit-heart';
+        h.textContent=emojis[i%emojis.length];
+        const dist=120+Math.random()*50;
+        h.style.cssText=`
+            font-size:${12+Math.random()*14}px;
+            --dur:${6+Math.random()*5}s;
+            --dist:${dist}px;
+            animation-delay:${i*0.6}s;
+        `;
+        setTimeout(()=>{h.style.opacity='1'},4500+i*200);
+        hs.appendChild(h);
+    }
+})();
+
+// OUVRIR - compatible iOS
+function openLetter(){
+    document.getElementById('intro').classList.add('hide');
+    document.getElementById('scene').classList.add('show');
+    setTimeout(initParticles,500);
+}
+
+// Event listeners tactiles - iOS friendly
+document.addEventListener('DOMContentLoaded',function(){
+    // Intro
+    var intro=document.getElementById('intro');
+    intro.addEventListener('touchstart',function(e){e.preventDefault();openLetter()},{passive:false});
+    intro.addEventListener('click',openLetter);
+
+    // Bouton magique
+    var btn=document.getElementById('magicBtn');
+    btn.addEventListener('touchstart',function(e){e.preventDefault();triggerMagic()},{passive:false});
+    btn.addEventListener('click',triggerMagic);
+
+    // Fermer fullscreen
+    var fsClose=document.getElementById('fsClose');
+    fsClose.addEventListener('touchstart',function(e){e.preventDefault();closeFS()},{passive:false});
+    fsClose.addEventListener('click',closeFS);
+
+    var fsLove=document.getElementById('fsLove');
+    fsLove.addEventListener('touchstart',function(e){
+        if(e.target===fsLove){e.preventDefault();closeFS();}
+    },{passive:false});
+    fsLove.addEventListener('click',function(e){
+        if(e.target===fsLove)closeFS();
+    });
+});
+
+// PARTICULES
+function initParticles(){
+    const cv=document.getElementById('particles'),ctx=cv.getContext('2d');
+    let W,H;
+    function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+    resize();window.addEventListener('resize',resize);
+
+    const parts=[];
+    class P{
+        constructor(init){
+            this.x=Math.random()*W;
+            this.y=init?Math.random()*H:H+30;
+            this.size=Math.random()*14+8;
+            this.vy=Math.random()*1+.3;
+            this.vx=Math.sin(Math.random()*Math.PI*2)*.3;
+            this.o=Math.random()*.4+.1;
+            this.rot=Math.random()*360;
+            this.rotS=(Math.random()-.5)*2;
+            this.w=Math.random()*Math.PI*2;
+            this.ws=Math.random()*.015+.005;
+        }
+        update(){
+            this.y-=this.vy;this.w+=this.ws;
+            this.x+=this.vx+Math.sin(this.w)*.3;
+            this.rot+=this.rotS;
+            if(this.y<-30){this.x=Math.random()*W;this.y=H+30}
+        }
+        draw(){
+            ctx.save();
+            ctx.translate(this.x,this.y);
+            ctx.rotate(this.rot*Math.PI/180);
+            ctx.globalAlpha=this.o;
+            ctx.font=this.size+'px serif';
+            ctx.textAlign='center';
+            ctx.fillText('❤',0,0);
+            ctx.restore();
+        }
+    }
+    for(let i=0;i<25;i++)parts.push(new P(true));
+    (function loop(){ctx.clearRect(0,0,W,H);parts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(loop)})();
+}
+
+// BOUTON
+let clicks=0;
+
+function triggerMagic(){
+    clicks++;
+    const el=document.getElementById('explosion');
+    el.classList.add('active');
+    const h=['💖','❤️','💕','💗','💓','💞','💘','💝','🌹','✨','💋'];
+    const cx=window.innerWidth/2,cy=window.innerHeight/2;
+
+    for(let i=0;i<60;i++){
+        const s=document.createElement('span');
+        s.className='burst';
+        s.textContent=h[Math.floor(Math.random()*h.length)];
+        s.style.left=cx+'px';s.style.top=cy+'px';
+        s.style.fontSize=(18+Math.random()*30)+'px';
+        const a=Math.random()*Math.PI*2;
+        const d=80+Math.random()*Math.min(window.innerWidth,window.innerHeight)*.5;
+        s.style.setProperty('--x',Math.cos(a)*d+'px');
+        s.style.setProperty('--y',Math.sin(a)*d+'px');
+        s.style.setProperty('--s',String(.5+Math.random()));
+        s.style.setProperty('--r',(Math.random()*720-360)+'deg');
+        s.style.animationDelay=Math.random()*.5+'s';
+        el.appendChild(s);
+        setTimeout(()=>s.remove(),2500);
+    }
+    setTimeout(()=>el.classList.remove('active'),2500);
+
+    if(clicks>=2){
+        clicks=0;
+        setTimeout(()=>document.getElementById('fsLove').classList.add('show'),600);
+    }
+}
+
+function closeFS(){
+    document.getElementById('fsLove').classList.remove('show');
+    // Pluie de cœurs
+    for(let i=0;i<30;i++){
+        setTimeout(()=>{
+            const h=document.createElement('span');
+            h.textContent=['❤️','💖','💕','🌹'][Math.floor(Math.random()*4)];
+            h.style.cssText=`position:fixed;font-size:${18+Math.random()*22}px;left:${Math.random()*100}vw;top:-25px;z-index:2500;pointer-events:none;animation:rain 2.5s ease-in forwards`;
+            document.body.appendChild(h);
+            setTimeout(()=>h.remove(),2500);
+        },i*50);
+    }
+}
+
+// Animation de pluie
+const st=document.createElement('style');
+st.textContent='@keyframes rain{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(360deg);opacity:.4}}';
+document.head.appendChild(st);
+</script>
+</body>
+</html>
