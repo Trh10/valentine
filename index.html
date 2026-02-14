@@ -833,19 +833,42 @@ document.addEventListener('DOMContentLoaded',function(){
     tabConvos.addEventListener('touchstart',showConvos,{passive:false});
     tabConvos.addEventListener('click',showConvos);
 
-    // Image viewer - tap on card to view fullscreen
+    // Image viewer - tap on card to view fullscreen (pas sur scroll)
     var allCards=document.querySelectorAll('.photo-card, .chat-card');
     allCards.forEach(function(card){
-        function openViewer(e){
-            if(e)e.preventDefault();
+        var touchStartY=0;
+        var touchStartTime=0;
+        var isMoved=false;
+
+        card.addEventListener('touchstart',function(e){
+            touchStartY=e.touches[0].clientY;
+            touchStartTime=Date.now();
+            isMoved=false;
+        },{passive:true});
+
+        card.addEventListener('touchmove',function(e){
+            var diff=Math.abs(e.touches[0].clientY-touchStartY);
+            if(diff>10) isMoved=true;
+        },{passive:true});
+
+        card.addEventListener('touchend',function(e){
+            if(!isMoved && (Date.now()-touchStartTime)<300){
+                e.preventDefault();
+                var src=card.getAttribute('data-img');
+                var cap=card.getAttribute('data-cap');
+                viewerImg.src=src;
+                viewerCaption.textContent=cap;
+                imgViewer.classList.add('show');
+            }
+        },{passive:false});
+
+        card.addEventListener('click',function(e){
             var src=card.getAttribute('data-img');
             var cap=card.getAttribute('data-cap');
             viewerImg.src=src;
             viewerCaption.textContent=cap;
             imgViewer.classList.add('show');
-        }
-        card.addEventListener('touchstart',openViewer,{passive:false});
-        card.addEventListener('click',openViewer);
+        });
     });
 
     // Fermer viewer
