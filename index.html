@@ -339,6 +339,68 @@
         .secret-btn:active{transform:scale(.9);background:rgba(255,0,0,.2)}
         @keyframes secretPulse{0%,100%{box-shadow:0 0 5px rgba(255,0,0,.1)}50%{box-shadow:0 0 20px rgba(255,0,0,.3)}}
 
+        /* ==================== MOT DE PASSE ==================== */
+        .password-overlay{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:3500;
+            background:rgba(2,0,0,.95);
+            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+            display:none;flex-direction:column;justify-content:center;align-items:center;
+            gap:20px;
+        }
+        .password-overlay.show{display:flex}
+        .password-overlay .pw-icon{font-size:50px;animation:heartBeat 1s infinite}
+        .password-overlay .pw-title{
+            font-family:'Great Vibes',cursive;
+            font-size:1.5rem;color:#ff2222;
+            text-shadow:0 0 15px rgba(255,0,0,.3);
+        }
+        .password-overlay .pw-sub{
+            font-family:'Dancing Script',cursive;
+            font-size:.9rem;color:rgba(255,255,255,.4);
+            text-align:center;padding:0 30px;
+        }
+        .password-overlay .pw-input{
+            width:min(75vw,280px);
+            padding:14px 20px;
+            font-family:'Dancing Script',cursive;
+            font-size:1.1rem;font-weight:700;
+            color:white;text-align:center;
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,0,0,.25);
+            border-radius:30px;
+            outline:none;
+            transition:border-color .3s;
+        }
+        .password-overlay .pw-input:focus{border-color:rgba(255,0,0,.6)}
+        .password-overlay .pw-input::placeholder{color:rgba(255,255,255,.25)}
+        .password-overlay .pw-submit{
+            padding:12px 35px;
+            font-family:'Dancing Script',cursive;
+            font-size:1.1rem;font-weight:700;
+            color:white;
+            background:linear-gradient(135deg,#cc0000,#990000);
+            border:none;border-radius:30px;
+            cursor:pointer;
+            box-shadow:0 5px 20px rgba(204,0,0,.3);
+            transition:all .3s;
+        }
+        .password-overlay .pw-submit:active{transform:scale(.95)}
+        .password-overlay .pw-error{
+            font-family:'Dancing Script',cursive;
+            font-size:.95rem;color:#ff4444;
+            opacity:0;transition:opacity .3s;
+            height:20px;
+        }
+        .password-overlay .pw-error.show{opacity:1}
+        .password-overlay .pw-close{
+            position:absolute;top:15px;right:15px;
+            width:36px;height:36px;border-radius:50%;
+            background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+            color:white;font-size:1rem;
+            cursor:pointer;display:flex;align-items:center;justify-content:center;
+        }
+
         /* ==================== GALERIE SECRÈTE ==================== */
         .gallery-overlay{
             position:fixed;top:0;left:0;width:100%;height:100%;
@@ -557,6 +619,17 @@
         <!-- BOUTON SECRET -->
         <div class="secret-btn" id="secretBtn" role="button">🔒</div>
     </div>
+</div>
+
+<!-- MOT DE PASSE -->
+<div class="password-overlay" id="pwOverlay">
+    <button class="pw-close" id="pwClose">✕</button>
+    <div class="pw-icon">🔐</div>
+    <p class="pw-title">Espace secret 💕</p>
+    <p class="pw-sub">Écris notre date spéciale pour débloquer...</p>
+    <input type="text" class="pw-input" id="pwInput" placeholder="Mot de passe..." autocomplete="off">
+    <button class="pw-submit" id="pwSubmit">💝 Ouvrir</button>
+    <p class="pw-error" id="pwError">❌ Mauvais mot de passe, réessaie bébé</p>
 </div>
 
 <!-- GALERIE SECRÈTE -->
@@ -806,11 +879,42 @@ document.addEventListener('DOMContentLoaded',function(){
     var viewerImg=document.getElementById('viewerImg');
     var viewerCaption=document.getElementById('viewerCaption');
     var viewerClose=document.getElementById('viewerClose');
+    var pwOverlay=document.getElementById('pwOverlay');
+    var pwInput=document.getElementById('pwInput');
+    var pwSubmit=document.getElementById('pwSubmit');
+    var pwError=document.getElementById('pwError');
+    var pwClose=document.getElementById('pwClose');
 
-    // Ouvrir galerie
+    // Ouvrir mot de passe
+    function openPw(e){if(e)e.preventDefault();pwOverlay.classList.add('show');pwInput.value='';pwError.classList.remove('show');setTimeout(function(){pwInput.focus()},300)}
+    secretBtn.addEventListener('touchstart',openPw,{passive:false});
+    secretBtn.addEventListener('click',openPw);
+
+    // Fermer mot de passe
+    function closePw(e){if(e)e.preventDefault();pwOverlay.classList.remove('show')}
+    pwClose.addEventListener('touchstart',closePw,{passive:false});
+    pwClose.addEventListener('click',closePw);
+
+    // Vérifier mot de passe
+    function checkPw(e){
+        if(e)e.preventDefault();
+        var val=pwInput.value.trim().toLowerCase().replace(/\s+/g,' ');
+        if(val==='10 decembre'||val==='10 décembre'||val==='10 december'||val==='10decembre'||val==='10décembre'){
+            pwOverlay.classList.remove('show');
+            gallery.classList.add('show');
+            secretBtn.textContent='🔓';
+        }else{
+            pwError.classList.add('show');
+            pwInput.style.borderColor='rgba(255,60,60,.6)';
+            setTimeout(function(){pwError.classList.remove('show');pwInput.style.borderColor=''},1500);
+        }
+    }
+    pwSubmit.addEventListener('touchstart',checkPw,{passive:false});
+    pwSubmit.addEventListener('click',checkPw);
+    pwInput.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw(e)});
+
+    // Ouvrir galerie (plus directement, seulement après mot de passe)
     function openGallery(e){if(e)e.preventDefault();gallery.classList.add('show')}
-    secretBtn.addEventListener('touchstart',openGallery,{passive:false});
-    secretBtn.addEventListener('click',openGallery);
 
     // Fermer galerie
     function closeGallery(e){if(e)e.preventDefault();gallery.classList.remove('show')}
