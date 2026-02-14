@@ -321,6 +321,164 @@
         ::-webkit-scrollbar{width:4px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:#660000;border-radius:2px}
+
+        /* ==================== BOUTON SECRET ==================== */
+        .secret-btn{
+            position:relative;
+            margin:50px auto 30px;
+            width:45px;height:45px;
+            background:rgba(255,0,0,.08);
+            border:1px solid rgba(255,0,0,.15);
+            border-radius:50%;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+            font-size:16px;
+            transition:all .4s ease;
+            animation:secretPulse 3s ease-in-out infinite;
+            opacity:0;animation:fadeUp 1s ease 7s forwards;
+        }
+        .secret-btn:active{transform:scale(.9);background:rgba(255,0,0,.2)}
+        @keyframes secretPulse{0%,100%{box-shadow:0 0 5px rgba(255,0,0,.1)}50%{box-shadow:0 0 20px rgba(255,0,0,.3)}}
+
+        /* ==================== GALERIE SECRÈTE ==================== */
+        .gallery-overlay{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:4000;
+            background:rgba(2,0,0,.97);
+            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+            display:none;flex-direction:column;
+            overflow:hidden;
+        }
+        .gallery-overlay.show{display:flex}
+
+        .gallery-header{
+            position:relative;
+            padding:18px 20px 12px;
+            text-align:center;
+            border-bottom:1px solid rgba(255,0,0,.15);
+            flex-shrink:0;
+        }
+        .gallery-header h2{
+            font-family:'Great Vibes',cursive;
+            font-size:1.6rem;color:#ff2222;
+            text-shadow:0 0 15px rgba(255,0,0,.3);
+        }
+        .gallery-header .gallery-sub{
+            font-family:'Dancing Script',cursive;
+            font-size:.85rem;color:rgba(255,255,255,.35);
+            margin-top:4px;
+        }
+        .gallery-close{
+            position:absolute;top:15px;right:15px;
+            width:36px;height:36px;border-radius:50%;
+            background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+            color:white;font-size:1rem;
+            cursor:pointer;display:flex;align-items:center;justify-content:center;
+        }
+        .gallery-close:active{background:rgba(255,255,255,.2)}
+
+        /* Tabs */
+        .gallery-tabs{
+            display:flex;justify-content:center;gap:8px;
+            padding:12px 15px;flex-shrink:0;
+        }
+        .gallery-tab{
+            padding:8px 20px;border-radius:25px;
+            font-family:'Dancing Script',cursive;font-size:1rem;font-weight:700;
+            color:rgba(255,255,255,.5);
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.08);
+            cursor:pointer;transition:all .3s;
+        }
+        .gallery-tab.active{
+            color:#ff2222;
+            background:rgba(255,0,0,.12);
+            border-color:rgba(255,0,0,.3);
+        }
+        .gallery-tab:active{transform:scale(.95)}
+
+        /* Gallery content */
+        .gallery-content{
+            flex:1;overflow-y:auto;overflow-x:hidden;
+            padding:15px;
+            -webkit-overflow-scrolling:touch;
+        }
+        .gallery-grid{
+            display:none;
+            flex-direction:column;
+            gap:15px;
+            align-items:center;
+        }
+        .gallery-grid.active{display:flex}
+
+        /* Photo cards */
+        .photo-card{
+            width:min(92vw,380px);
+            border-radius:18px;overflow:hidden;
+            background:rgba(255,255,255,.03);
+            border:1px solid rgba(255,0,0,.12);
+            box-shadow:0 8px 30px rgba(0,0,0,.4);
+            transition:transform .3s;
+        }
+        .photo-card:active{transform:scale(.98)}
+        .photo-card img{
+            width:100%;display:block;
+            object-fit:cover;
+        }
+        .photo-card .card-caption{
+            padding:12px 15px;
+            font-family:'Dancing Script',cursive;
+            font-size:1rem;
+            color:rgba(255,255,255,.7);
+            text-align:center;
+        }
+        .photo-card .card-caption .caption-emoji{
+            font-size:1.2rem;margin-right:5px;
+        }
+
+        /* Chat screenshots */
+        .chat-card{
+            width:min(92vw,380px);
+            border-radius:18px;overflow:hidden;
+            background:rgba(255,255,255,.03);
+            border:1px solid rgba(255,0,0,.12);
+            box-shadow:0 8px 30px rgba(0,0,0,.4);
+        }
+        .chat-card img{
+            width:100%;display:block;
+        }
+        .chat-card .card-caption{
+            padding:12px 15px;
+            font-family:'Dancing Script',cursive;
+            font-size:1rem;
+            color:rgba(255,255,255,.7);
+            text-align:center;
+        }
+
+        /* Fullscreen image viewer */
+        .img-viewer{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:5000;background:rgba(0,0,0,.95);
+            display:none;align-items:center;justify-content:center;
+            flex-direction:column;
+        }
+        .img-viewer.show{display:flex}
+        .img-viewer img{
+            max-width:95vw;max-height:80vh;
+            border-radius:12px;
+            object-fit:contain;
+        }
+        .img-viewer .viewer-close{
+            position:absolute;top:15px;right:15px;
+            width:40px;height:40px;border-radius:50%;
+            background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+            color:white;font-size:1.2rem;
+            cursor:pointer;display:flex;align-items:center;justify-content:center;
+        }
+        .img-viewer .viewer-caption{
+            font-family:'Dancing Script',cursive;
+            font-size:1.1rem;color:rgba(255,255,255,.7);
+            margin-top:15px;text-align:center;padding:0 20px;
+        }
     </style>
 </head>
 <body>
@@ -395,7 +553,73 @@
         </div>
 
         <button class="magic-btn" id="magicBtn" type="button">💝 Appuie ici bébé 💝</button>
+
+        <!-- BOUTON SECRET -->
+        <div class="secret-btn" id="secretBtn" role="button">🔒</div>
     </div>
+</div>
+
+<!-- GALERIE SECRÈTE -->
+<div class="gallery-overlay" id="gallery">
+    <div class="gallery-header">
+        <h2>🤫 Notre Secret 💕</h2>
+        <p class="gallery-sub">Nos souvenirs rien qu'à nous...</p>
+        <button class="gallery-close" id="galleryClose">✕</button>
+    </div>
+
+    <div class="gallery-tabs">
+        <div class="gallery-tab active" data-tab="photos" id="tabPhotos">📸 Photos</div>
+        <div class="gallery-tab" data-tab="convos" id="tabConvos">💬 Conversations</div>
+    </div>
+
+    <div class="gallery-content">
+        <!-- PHOTOS -->
+        <div class="gallery-grid active" id="gridPhotos">
+            <div class="photo-card" data-img="img/photo8.jpeg" data-cap="La plus belle des femmes ✨💕">
+                <img src="img/photo8.jpeg" alt="Gemima" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">✨</span>La plus belle des femmes 💕</div>
+            </div>
+            <div class="photo-card" data-img="img/photo5.jpeg" data-cap="Nous deux 🥰❤️">
+                <img src="img/photo5.jpeg" alt="Nous deux" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">🥰</span>Nous deux ❤️</div>
+            </div>
+            <div class="photo-card" data-img="img/photo7.jpeg" data-cap="Lokoso 😍❤️">
+                <img src="img/photo7.jpeg" alt="Gemima" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">😍</span>Lokoso ❤️</div>
+            </div>
+            <div class="photo-card" data-img="img/photo6.jpeg" data-cap="Nos mains, pour toujours 🤝💞">
+                <img src="img/photo6.jpeg" alt="Nos mains" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">💞</span>Nos mains, pour toujours</div>
+            </div>
+            <div class="photo-card" data-img="img/photo4.jpeg" data-cap="Tu es celle que je vois dès que je touche mon téléphone 📱❤️">
+                <img src="img/photo4.jpeg" alt="Mon fond d'écran" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">📱</span>Tu es celle que je vois dès que je touche mon téléphone ❤️</div>
+            </div>
+        </div>
+
+        <!-- CONVERSATIONS -->
+        <div class="gallery-grid" id="gridConvos">
+            <div class="chat-card" data-img="img/photo2.jpeg" data-cap="Nos mots d'amour 💌">
+                <img src="img/photo2.jpeg" alt="Conversation" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">💌</span>Nos mots d'amour</div>
+            </div>
+            <div class="chat-card" data-img="img/photo1.jpeg" data-cap="Je t'aime trop ❤️">
+                <img src="img/photo1.jpeg" alt="Conversation" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">❤️</span>Je t'aime trop</div>
+            </div>
+            <div class="chat-card" data-img="img/photo3.jpeg" data-cap="2h40 au téléphone... jamais assez 📞💕">
+                <img src="img/photo3.jpeg" alt="Appel" loading="lazy">
+                <div class="card-caption"><span class="caption-emoji">📞</span>2h40 au tel... jamais assez 💕</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IMAGE VIEWER -->
+<div class="img-viewer" id="imgViewer">
+    <button class="viewer-close" id="viewerClose">✕</button>
+    <img id="viewerImg" src="" alt="">
+    <p class="viewer-caption" id="viewerCaption"></p>
 </div>
 
 <!-- EXPLOSION -->
@@ -568,6 +792,73 @@ function closeFS(){
 const st=document.createElement('style');
 st.textContent='@keyframes rain{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(360deg);opacity:.4}}';
 document.head.appendChild(st);
+
+// ==================== GALERIE SECRÈTE ====================
+document.addEventListener('DOMContentLoaded',function(){
+    var secretBtn=document.getElementById('secretBtn');
+    var gallery=document.getElementById('gallery');
+    var galleryClose=document.getElementById('galleryClose');
+    var tabPhotos=document.getElementById('tabPhotos');
+    var tabConvos=document.getElementById('tabConvos');
+    var gridPhotos=document.getElementById('gridPhotos');
+    var gridConvos=document.getElementById('gridConvos');
+    var imgViewer=document.getElementById('imgViewer');
+    var viewerImg=document.getElementById('viewerImg');
+    var viewerCaption=document.getElementById('viewerCaption');
+    var viewerClose=document.getElementById('viewerClose');
+
+    // Ouvrir galerie
+    function openGallery(e){if(e)e.preventDefault();gallery.classList.add('show')}
+    secretBtn.addEventListener('touchstart',openGallery,{passive:false});
+    secretBtn.addEventListener('click',openGallery);
+
+    // Fermer galerie
+    function closeGallery(e){if(e)e.preventDefault();gallery.classList.remove('show')}
+    galleryClose.addEventListener('touchstart',closeGallery,{passive:false});
+    galleryClose.addEventListener('click',closeGallery);
+
+    // Tabs
+    function showPhotos(e){
+        if(e)e.preventDefault();
+        tabPhotos.classList.add('active');tabConvos.classList.remove('active');
+        gridPhotos.classList.add('active');gridConvos.classList.remove('active');
+    }
+    function showConvos(e){
+        if(e)e.preventDefault();
+        tabConvos.classList.add('active');tabPhotos.classList.remove('active');
+        gridConvos.classList.add('active');gridPhotos.classList.remove('active');
+    }
+    tabPhotos.addEventListener('touchstart',showPhotos,{passive:false});
+    tabPhotos.addEventListener('click',showPhotos);
+    tabConvos.addEventListener('touchstart',showConvos,{passive:false});
+    tabConvos.addEventListener('click',showConvos);
+
+    // Image viewer - tap on card to view fullscreen
+    var allCards=document.querySelectorAll('.photo-card, .chat-card');
+    allCards.forEach(function(card){
+        function openViewer(e){
+            if(e)e.preventDefault();
+            var src=card.getAttribute('data-img');
+            var cap=card.getAttribute('data-cap');
+            viewerImg.src=src;
+            viewerCaption.textContent=cap;
+            imgViewer.classList.add('show');
+        }
+        card.addEventListener('touchstart',openViewer,{passive:false});
+        card.addEventListener('click',openViewer);
+    });
+
+    // Fermer viewer
+    function closeViewer(e){if(e)e.preventDefault();imgViewer.classList.remove('show')}
+    viewerClose.addEventListener('touchstart',closeViewer,{passive:false});
+    viewerClose.addEventListener('click',closeViewer);
+    imgViewer.addEventListener('touchstart',function(e){
+        if(e.target===imgViewer){e.preventDefault();closeViewer()}
+    },{passive:false});
+    imgViewer.addEventListener('click',function(e){
+        if(e.target===imgViewer)closeViewer();
+    });
+});
 </script>
 </body>
 </html>
